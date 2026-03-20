@@ -71,35 +71,36 @@ require __DIR__ . '/includes/header.php';
             </div>
 
             <div class="card">
-                <h2>Modules</h2>
+    <h2>Modules by Year</h2>
+    <p>Explore the modules included in each year of study.</p>
 
-                <?php if (!empty($modules)): ?>
-                    <?php
-                    $currentYear = null;
-                    foreach ($modules as $module):
-                        if ($currentYear !== $module['yearOfStudy']):
-                            $currentYear = $module['yearOfStudy'];
-                    ?>
-                        <h3>Year <?= e($currentYear) ?></h3>
-                    <?php endif; ?>
+    <?php if (!empty($modules)): ?>
+        <?php
+        $currentYear = null;
+        foreach ($modules as $module):
+            if ($currentYear !== $module['yearOfStudy']):
+                $currentYear = $module['yearOfStudy'];
+        ?>
+            <h3>Year <?= e($currentYear) ?></h3>
+        <?php endif; ?>
 
-                        <p><?= e($module['moduleName']) ?></p>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <p>No modules available for this programme.</p>
-                <?php endif; ?>
-            </div>
+            <p><?= e($module['moduleName']) ?></p>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <p>No modules available for this programme.</p>
+    <?php endif; ?>
+        </div>
 
             <div class="card">
                 <h2>Register Your Interest</h2>
                 <p>Complete the form below to register your interest in this programme.</p>
 
                 <?php if ($success !== ''): ?>
-                    <p><?= e($success) ?></p>
+                <p><strong>Success:</strong> <?= e($success) ?></p>
                 <?php endif; ?>
 
                 <?php if ($error !== ''): ?>
-                    <p><?= e($error) ?></p>
+                <p><strong>Error:</strong> <?= e($error) ?></p>
                 <?php endif; ?>
 
                 <form method="POST" action="">
