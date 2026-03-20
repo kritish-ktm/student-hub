@@ -3,16 +3,27 @@ require __DIR__ . '/includes/db.php';
 require __DIR__ . '/includes/helpers.php';
 
 $level = $_GET['level'] ?? '';
+$q = trim($_GET['q'] ?? '');
 $programmes = [];
 
 try {
+    $sql = "SELECT * FROM Programmes WHERE isPublished = 1";
+    $params = [];
+
     if ($level !== '') {
-        $stmt = $pdo->prepare("SELECT * FROM Programmes WHERE isPublished = 1 AND level = ? ORDER BY programmeName ASC");
-        $stmt->execute([$level]);
-    } else {
-        $stmt = $pdo->query("SELECT * FROM Programmes WHERE isPublished = 1 ORDER BY programmeName ASC");
+        $sql .= " AND level = ?";
+        $params[] = $level;
     }
 
+    if ($q !== '') {
+        $sql .= " AND programmeName LIKE ?";
+        $params[] = "%$q%";
+    }
+
+    $sql .= " ORDER BY programmeName ASC";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute($params);
     $programmes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (Throwable $e) {
     // fail silently for demo
@@ -31,13 +42,24 @@ require __DIR__ . '/includes/header.php';
 
         <div class="card">
             <form method="GET" action="/student_course_hub/programmes.php">
+                <label for="q"><strong>Search programmes</strong></label><br><br>
+                <input
+                    type="text"
+                    name="q"
+                    id="q"
+                    value="<?= e($q) ?>"
+                    placeholder="Enter programme name"
+                ><br><br>
+
                 <label for="level"><strong>Filter by level</strong></label><br><br>
                 <select name="level" id="level">
                     <option value="">All Levels</option>
                     <option value="Undergraduate" <?= $level === 'Undergraduate' ? 'selected' : '' ?>>Undergraduate</option>
                     <option value="Postgraduate" <?= $level === 'Postgraduate' ? 'selected' : '' ?>>Postgraduate</option>
                 </select>
-                <button type="submit" class="btn">Apply Filter</button>
+                <br><br>
+
+                <button type="submit" class="btn">Search</button>
             </form>
         </div>
 
