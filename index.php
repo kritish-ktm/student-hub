@@ -20,6 +20,16 @@ $pageTitle = 'Student Hub | Home';
 require __DIR__ . '/includes/header.php';
 ?>
 
+// Fetch featured programmes
+$featured = [];
+
+try {
+    $stmt = $pdo->query("SELECT * FROM Programmes WHERE isPublished = 1 LIMIT 6");
+    $featured = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (Throwable $e) {
+    // fail silently
+}
+
 <main class="page-shell">
     <section class="hero">
         <div class="hero__content">
@@ -52,6 +62,27 @@ require __DIR__ . '/includes/header.php';
             <div class="stat__value"><?= e($stats['students']) ?></div>
             <div class="stat__label">Interested Students</div>
         </div>
+    </div>
+</section>
+<section class="section">
+    <div class="section__header">
+        <h2>Featured Programmes</h2>
+        <p>Explore some of our most popular courses.</p>
+    </div>
+
+    <div class="grid">
+        <?php foreach ($featured as $programme): ?>
+            <div class="card">
+                <h3><?= e($programme['programmeName']) ?></h3>
+                <p><?= e($programme['description']) ?></p>
+
+                <p><strong>Level:</strong> <?= e($programme['level']) ?></p>
+
+                <a class="btn" href="/student_course_hub/programme.php?id=<?= $programme['programmeID'] ?>">
+                    View Details
+                </a>
+            </div>
+        <?php endforeach; ?>
     </div>
 </section>
 </main>
