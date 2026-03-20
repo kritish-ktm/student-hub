@@ -32,6 +32,26 @@ require __DIR__ . '/includes/header.php';
 ?>
 
 <main class="page-shell">
+    <section class="section">
+    <div class="section__header">
+        <h2>Browse by Study Level</h2>
+        <p>Choose the type of programme you want to explore.</p>
+    </div>
+
+    <div class="grid">
+        <div class="card">
+            <h3>Undergraduate Programmes</h3>
+            <p>Explore foundation and bachelor-level courses designed for new university students.</p>
+            <a class="btn" href="/student_course_hub/programmes.php?level=Undergraduate">View Undergraduate</a>
+        </div>
+
+        <div class="card">
+            <h3>Postgraduate Programmes</h3>
+            <p>Discover advanced master’s and specialised programmes for further academic study.</p>
+            <a class="btn" href="/student_course_hub/programmes.php?level=Postgraduate">View Postgraduate</a>
+        </div>
+    </div>
+</section>
     <section class="hero">
         <div class="hero__content">
             <span class="eyebrow">Explore your future</span>
