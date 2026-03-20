@@ -88,11 +88,12 @@ require __DIR__ . '/includes/header.php';
     </section>
 
     <section class="section">
-        <div class="section__header">
-            <h2>Featured Programmes</h2>
-            <p>Explore some of our most popular courses.</p>
-        </div>
+    <div class="section__header">
+        <h2>Featured Programmes</h2>
+        <p>Explore some of our most popular undergraduate and postgraduate courses.</p>
+    </div>
 
+    <?php if (!empty($featured)): ?>
         <div class="grid">
             <?php foreach ($featured as $programme): ?>
                 <div class="card">
@@ -106,7 +107,14 @@ require __DIR__ . '/includes/header.php';
                 </div>
             <?php endforeach; ?>
         </div>
-    </section>
+    <?php else: ?>
+        <div class="card">
+            <p>No featured programmes are available right now.</p>
+        </div>
+    <?php endif; ?>
+</section>
+
+    
 </main>
 
 <?php require __DIR__ . '/includes/footer.php'; ?>
