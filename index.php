@@ -14,11 +14,8 @@ try {
     $stats['modules'] = (int)$pdo->query("SELECT COUNT(*) FROM Modules")->fetchColumn();
     $stats['students'] = (int)$pdo->query("SELECT COUNT(*) FROM InterestedStudents")->fetchColumn();
 } catch (Throwable $e) {
-    // fail silently (for demo)
+    // fail silently
 }
-$pageTitle = 'Student Hub | Home';
-require __DIR__ . '/includes/header.php';
-?>
 
 // Fetch featured programmes
 $featured = [];
@@ -29,6 +26,10 @@ try {
 } catch (Throwable $e) {
     // fail silently
 }
+
+$pageTitle = 'Student Hub | Home';
+require __DIR__ . '/includes/header.php';
+?>
 
 <main class="page-shell">
     <section class="hero">
@@ -46,45 +47,46 @@ try {
             </div>
         </div>
     </section>
+
     <section class="stats">
-    <div class="stats__grid">
-        <div class="stat">
-            <div class="stat__value"><?= e($stats['programmes']) ?></div>
-            <div class="stat__label">Programmes</div>
-        </div>
-
-        <div class="stat">
-            <div class="stat__value"><?= e($stats['modules']) ?></div>
-            <div class="stat__label">Modules</div>
-        </div>
-
-        <div class="stat">
-            <div class="stat__value"><?= e($stats['students']) ?></div>
-            <div class="stat__label">Interested Students</div>
-        </div>
-    </div>
-</section>
-<section class="section">
-    <div class="section__header">
-        <h2>Featured Programmes</h2>
-        <p>Explore some of our most popular courses.</p>
-    </div>
-
-    <div class="grid">
-        <?php foreach ($featured as $programme): ?>
-            <div class="card">
-                <h3><?= e($programme['programmeName']) ?></h3>
-                <p><?= e($programme['description']) ?></p>
-
-                <p><strong>Level:</strong> <?= e($programme['level']) ?></p>
-
-                <a class="btn" href="/student_course_hub/programme.php?id=<?= $programme['programmeID'] ?>">
-                    View Details
-                </a>
+        <div class="stats__grid">
+            <div class="stat">
+                <div class="stat__value"><?= e($stats['programmes']) ?></div>
+                <div class="stat__label">Programmes</div>
             </div>
-        <?php endforeach; ?>
-    </div>
-</section>
+
+            <div class="stat">
+                <div class="stat__value"><?= e($stats['modules']) ?></div>
+                <div class="stat__label">Modules</div>
+            </div>
+
+            <div class="stat">
+                <div class="stat__value"><?= e($stats['students']) ?></div>
+                <div class="stat__label">Interested Students</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="section__header">
+            <h2>Featured Programmes</h2>
+            <p>Explore some of our most popular courses.</p>
+        </div>
+
+        <div class="grid">
+            <?php foreach ($featured as $programme): ?>
+                <div class="card">
+                    <h3><?= e($programme['programmeName']) ?></h3>
+                    <p><?= e($programme['description']) ?></p>
+                    <p><strong>Level:</strong> <?= e($programme['level']) ?></p>
+
+                    <a class="btn" href="/student_course_hub/programme.php?id=<?= $programme['programmeID'] ?>">
+                        View Details
+                    </a>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    </section>
 </main>
 
 <?php require __DIR__ . '/includes/footer.php'; ?>
