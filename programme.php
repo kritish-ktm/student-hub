@@ -53,6 +53,21 @@ require __DIR__ . '/includes/header.php';
                     <p>No modules available for this programme.</p>
                 <?php endif; ?>
             </div>
+
+            <div class="card">
+                <h2>Register Your Interest</h2>
+                <p>Complete the form below to register your interest in this programme.</p>
+
+                <form method="POST" action="">
+                    <label for="studentName"><strong>Name</strong></label><br><br>
+                    <input type="text" name="studentName" id="studentName" placeholder="Enter your full name" required><br><br>
+
+                    <label for="studentEmail"><strong>Email</strong></label><br><br>
+                    <input type="email" name="studentEmail" id="studentEmail" placeholder="Enter your email address" required><br><br>
+
+                    <button type="submit" class="btn">Register Interest</button>
+                </form>
+            </div>
         <?php else: ?>
             <div class="card">
                 <h1>Programme not found</h1>
