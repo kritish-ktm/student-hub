@@ -63,6 +63,19 @@ require __DIR__ . '/includes/header.php';
             </form>
         </div>
 
+        <div class="section__header">
+    <h2>Available Results</h2>
+    <p>
+        <?= count($programmes) ?> programme(s) found
+        <?php if ($q !== ''): ?>
+            for “<?= e($q) ?>”
+        <?php endif; ?>
+        <?php if ($level !== ''): ?>
+            in <?= e($level) ?>
+        <?php endif; ?>.
+    </p>
+</div>
+
         <div class="grid">
             <?php if (!empty($programmes)): ?>
                 <?php foreach ($programmes as $programme): ?>
