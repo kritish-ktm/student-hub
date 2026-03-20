@@ -6,6 +6,12 @@ $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 $programme = null;
 $modules = [];
 
+$success = '';
+$error = '';
+
+$name = '';
+$email = '';
+
 try {
     $stmt = $pdo->prepare("SELECT * FROM Programmes WHERE programmeID = ? AND isPublished = 1");
     $stmt->execute([$id]);
@@ -18,6 +24,36 @@ try {
     }
 } catch (Throwable $e) {
     // fail silently for demo
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $programme) {
+    $name = trim($_POST['studentName'] ?? '');
+    $email = trim($_POST['studentEmail'] ?? '');
+
+    if ($name === '' || $email === '') {
+        $error = 'Please fill in all fields.';
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $error = 'Please enter a valid email address.';
+    } else {
+        try {
+            $checkStmt = $pdo->prepare("SELECT COUNT(*) FROM InterestedStudents WHERE studentEmail = ? AND programmeID = ?");
+            $checkStmt->execute([$email, $id]);
+            $alreadyExists = (int) $checkStmt->fetchColumn();
+
+            if ($alreadyExists > 0) {
+                $error = 'You have already registered interest for this programme.';
+            } else {
+                $insertStmt = $pdo->prepare("INSERT INTO InterestedStudents (studentName, studentEmail, programmeID) VALUES (?, ?, ?)");
+                $insertStmt->execute([$name, $email, $id]);
+
+                $success = 'Your interest has been registered successfully.';
+                $name = '';
+                $email = '';
+            }
+        } catch (Throwable $e) {
+            $error = 'Unable to register interest at the moment.';
+        }
+    }
 }
 
 $pageTitle = $programme ? 'Student Hub | ' . $programme['programmeName'] : 'Student Hub | Programme';
@@ -58,12 +94,34 @@ require __DIR__ . '/includes/header.php';
                 <h2>Register Your Interest</h2>
                 <p>Complete the form below to register your interest in this programme.</p>
 
+                <?php if ($success !== ''): ?>
+                    <p><?= e($success) ?></p>
+                <?php endif; ?>
+
+                <?php if ($error !== ''): ?>
+                    <p><?= e($error) ?></p>
+                <?php endif; ?>
+
                 <form method="POST" action="">
                     <label for="studentName"><strong>Name</strong></label><br><br>
-                    <input type="text" name="studentName" id="studentName" placeholder="Enter your full name" required><br><br>
+                    <input
+                        type="text"
+                        name="studentName"
+                        id="studentName"
+                        placeholder="Enter your full name"
+                        value="<?= e($name) ?>"
+                        required
+                    ><br><br>
 
                     <label for="studentEmail"><strong>Email</strong></label><br><br>
-                    <input type="email" name="studentEmail" id="studentEmail" placeholder="Enter your email address" required><br><br>
+                    <input
+                        type="email"
+                        name="studentEmail"
+                        id="studentEmail"
+                        placeholder="Enter your email address"
+                        value="<?= e($email) ?>"
+                        required
+                    ><br><br>
 
                     <button type="submit" class="btn">Register Interest</button>
                 </form>
